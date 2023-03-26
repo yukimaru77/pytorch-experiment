@@ -1,0 +1,29 @@
+# Docker Composeのバージョンを指定
+version: '3'
+
+# サービスを定義
+services:
+  # JupyterLabコンテナの設定
+  jupyterlab:
+    # Dockerfileからビルド
+    build: .
+    # イメージ名を指定
+    image: jupyterlab-test-img
+    # コンテナ名を指定
+    container_name: jupyterlab-test
+    # 作業ディレクトリを指定
+    working_dir: /work
+    # ローカルのworkディレクトリをコンテナの/workディレクトリにマウント
+    volumes:
+      - ./work:/work
+    # ポート番号の設定
+    ports:
+      - "8888:8888"
+    # JupyterLabを起動するコマンドを指定
+    command:
+      jupyter-lab --ip 0.0.0.0 --allow-root -b localhost
+      
+    runtime: nvidia
+    environment:
+      - NVIDIA_VISIBLE_DEVICES=all
+      - NVIDIA_DRIVER_CAPABILITIES=all
